@@ -17,6 +17,16 @@ import java.util.function.BinaryOperator;
  *         Some utilities for meta heuristics.
  */
 public class Utils {
+
+
+	public static List<Point> clonePointList(List<Point> points) {
+		ArrayList<Point> clonedPoints = new ArrayList<Point>(points.size());
+
+		for (Point p : points) {
+			clonedPoints.add(p);
+		}
+		return clonedPoints;
+	}
 	/**
 	 * Get the Euclidean distance between two points in 2D.
 	 * 
