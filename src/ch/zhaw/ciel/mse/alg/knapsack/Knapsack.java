@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Knapsack {
 
+    private int iteration;
     private int maxWeight;
     private int contentWeight;
     private int contentValue;
@@ -12,6 +13,7 @@ public class Knapsack {
     private List<Item> repertory;
 
     public Knapsack(int maxWeight, List<Item> repertory) {
+        this.iteration     = 1;
         this.maxWeight     = maxWeight;
         this.contentWeight = 0;
         this.contentValue  = 0;
@@ -43,6 +45,10 @@ public class Knapsack {
         return removed;
     }
 
+    public void increaseIteration() {
+        iteration++;
+    }
+
     public int getMaxWeight() {
         return maxWeight;
     }
@@ -67,20 +73,21 @@ public class Knapsack {
         int value = 0;
         int weight = 0;
 
+        System.out.println("Iteration " + iteration);
         for (Item item : content) {
             value += item.getValue();
             weight += item.getWeight();
             System.out.printf("%s %,10d | %,10d |\n", item.toString(), value, weight);
         }
-        System.out.println("|=====|============|============|======|============|============|");
+        System.out.println("|=====|============|============|=====|============|============|");
     }
 
     public void printFullContent() {
         System.out.println("| Nr  | Item value | Item weight| Tabu | KS value   | KS weight  |");
-        System.out.println("|=====|============|============|======|============|============|");
+        System.out.println("|=====|============|============|=====|============|============|");
         printOverviewContent();
         System.out.printf("|     | %,10d | %,10d |\n", contentValue, contentWeight);
-        System.out.println("|=====|============|============|======|============|============|");
+        System.out.println("|=====|============|============|=====|============|============|");
         System.out.println("                     " + String.format("%,10d", maxWeight) + " max. Weight");
         System.out.println("                     " + String.format("%,10d", (maxWeight - contentWeight)) + " diff");
     }

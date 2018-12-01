@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TabuGreedy implements Solver {
 
-    public static int TABU_DURATION = 4;
+    public static int TABU_DURATION = 3 + 1;
 
     private Item findMostValuableInRepertoryThatFitsInContent(Knapsack knapsack) {
         Item mostValuableItem;
@@ -54,17 +54,24 @@ public class TabuGreedy implements Solver {
         }
     }
 
+    private boolean compareToBest(List<Item> bestItems, List<Item> content) {
+        if (bestItems != null && bestItems.size() == content.size()) {
+            if (bestItems.containsAll(content)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void solve(Knapsack knapsack) {
-        List<Item> items = knapsack.getRepertory();
-        List<Item> tabuList  = new ArrayList<>(items.size());
+        List<Item> bestItems = null;
+        int bestContentWeight = 0;
 
         Item mostValuableItem;
         Item leastValuableItem = null;
-        boolean run = true;
 
-        //while (items.size() > 0) {
-        while (run) {
+        while (knapsack.getContentWeight() != knapsack.getMaxWeight()) {
             /* Find most valuable */
             mostValuableItem = findMostValuableInRepertoryThatFitsInContent(knapsack);
 
@@ -76,49 +83,38 @@ public class TabuGreedy implements Solver {
                     return;
                 }
 
+                /* Loop */
+                if (compareToBest(bestItems, knapsack.getContent())) {
+                    System.out.println("Loop!");
+                    return;
+                }
+
                 /** set tabu duration **/
                 mostValuableItem.setTabuDuration(TABU_DURATION);
-
-                knapsack.printOverviewContent();
 
             /* If not found... */
             } else {
-
-                /* Do while most valuable found */
-                do {
-                    /* Remove least valuable */
-                    leastValuableItem = findLeastValuableInContent(knapsack);
-                    if (!knapsack.tryRemoveFromContent(leastValuableItem)) {
-                        System.out.println("can't remove least valuable!");
-                        return;
-                    }
-
-                    /** set tabu duration **/
-                    leastValuableItem.setTabuDuration(TABU_DURATION);
-
-                    /* Find most valuable */
-                    mostValuableItem = findMostValuableInRepertoryThatFitsInContent(knapsack);
-                } while (mostValuableItem == null);
-
-                if(!knapsack.tryAddToContent(mostValuableItem)) {
-                    System.out.println("can't add most valuable: " + mostValuableItem.toString());
+                /* Remove least valuable */
+                leastValuableItem = findLeastValuableInContent(knapsack);
+                if (!knapsack.tryRemoveFromContent(leastValuableItem)) {
+                    System.out.println("can't remove least valuable!");
                     return;
                 }
 
                 /** set tabu duration **/
-                mostValuableItem.setTabuDuration(TABU_DURATION);
-
-                /* Least removed is most added?*/
-                if (leastValuableItem == mostValuableItem) {
-
-                    /* Exit */
-                    System.out.println("least removed is most added: " + mostValuableItem.toString());
-                    return;
-                }
+                leastValuableItem.setTabuDuration(TABU_DURATION);
             }
             /* Decrease tabu duration */
             decreaseTabuDurationInContent(knapsack);
 
+            if (knapsack.getContentWeight() > bestContentWeight) {
+                bestContentWeight = knapsack.getContentWeight();
+                bestItems = new ArrayList<>(knapsack.getContent());
+            }
+
+            knapsack.printOverviewContent();
+            knapsack.increaseIteration();
+            System.out.print("");
         }
     }
 }

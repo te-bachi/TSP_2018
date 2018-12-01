@@ -54,6 +54,6 @@ public class Item {
     }
 
     public String toString() {
-        return String.format("| %3d | %,10d | %,10d | %d |", nr, value, weight,tabuDuration);
+        return String.format("| %3d | %,10d | %,10d | %3d |", nr, value, weight,tabuDuration);
     }
 }
