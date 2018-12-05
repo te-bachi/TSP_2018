@@ -17,7 +17,6 @@ public class KnapsackReader {
     private static int OFFSET_VALUES    = 3;
 
     public static Knapsack load(Path filePath) throws IOException {
-        //BufferedReader tspFileReader = Files.newBufferedReader(filePath, Charset.forName("UTF-8"));
 
         List<String> lines      = Files.readAllLines(filePath);
         int          numItems   = Integer.parseInt(lines.get(0));
@@ -27,8 +26,6 @@ public class KnapsackReader {
             throw new IOException("number of lines doesn't match content");
         }
 
-        //for (int i = 0; i < lines.size() - 2 || i)
-        //List<Integer> points = lines.subList(2, numItems).stream().map(line -> Integer(line)).collect(Collectors.toList());;
         int[] weights = lines.subList(OFFSET_WEIGHTS, numItems + OFFSET_WEIGHTS).stream().mapToInt(Integer::valueOf).toArray();
         int[] values  = lines.subList(numItems + OFFSET_VALUES, (2 * numItems) + OFFSET_VALUES).stream().mapToInt(Integer::valueOf).toArray();
 

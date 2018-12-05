@@ -20,11 +20,12 @@ public class KnapsackMain {
         String path = PATH_INSTANCE + java.io.File.separator + instanceName + INSTANCE_FILE_EXTENSION;
         Knapsack knapsack = KnapsackReader.load(Paths.get(path));
 
+        knapsack.printHeader();
         //new NaiveGreedy().solve(knapsack);
-        //SmarterGreedy.solve(knapsack);
+        //new SmarterGreedy.solve(knapsack);
         new TabuGreedy().solve(knapsack);
 
-        knapsack.printFullContent();
+        knapsack.printFooter();
         System.out.printf("Done");
     }
 }

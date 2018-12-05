@@ -69,6 +69,11 @@ public class Knapsack {
         return repertory;
     }
 
+    public void printHeader() {
+        System.out.println("| Nr  | Item value | Item weight| Tabu | KS value   | KS weight  |");
+        System.out.println("|=====|============|============|=====|============|============|");
+    }
+
     public void printOverviewContent() {
         int value = 0;
         int weight = 0;
@@ -82,13 +87,16 @@ public class Knapsack {
         System.out.println("|=====|============|============|=====|============|============|");
     }
 
-    public void printFullContent() {
-        System.out.println("| Nr  | Item value | Item weight| Tabu | KS value   | KS weight  |");
-        System.out.println("|=====|============|============|=====|============|============|");
-        printOverviewContent();
+    public void printFooter() {
         System.out.printf("|     | %,10d | %,10d |\n", contentValue, contentWeight);
         System.out.println("|=====|============|============|=====|============|============|");
         System.out.println("                     " + String.format("%,10d", maxWeight) + " max. Weight");
         System.out.println("                     " + String.format("%,10d", (maxWeight - contentWeight)) + " diff");
+    }
+
+    public void printFullContent() {
+        printHeader();
+        printOverviewContent();
+        printFooter();
     }
 }
