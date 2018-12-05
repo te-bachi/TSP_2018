@@ -7,7 +7,7 @@ import ch.zhaw.ciel.mse.alg.tsp.utils.Instance;
 import ch.zhaw.ciel.mse.alg.tsp.utils.Point;
 import ch.zhaw.ciel.mse.alg.tsp.utils.Utils;
 
-public class NearestNeighbor {
+public class NearestNeighbor implements Solver {
 
     /*
     private void printTour(List<Point> tour) {
@@ -21,7 +21,7 @@ public class NearestNeighbor {
     }
     */
 
-    public static List<Point> solve(Instance instance){
+    public List<Point> solve(Instance instance){
         List<Point> points                  = instance.clonePointList();
         List<Point> remainingCities         = new ArrayList<>(points.size());
         List<Point> visitedCities           = new ArrayList<>(points.size());

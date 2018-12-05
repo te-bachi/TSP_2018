@@ -17,13 +17,13 @@ import ch.zhaw.ciel.mse.alg.tsp.utils.Utils;
  * by ascending id.
  * For positions with an equal cost, the first such position is taken.
  */
-public class GreedyInsertion {
+public class GreedyInsertion implements Solver {
 	/**
 	 * Solve the given TSP using greedy insertion.
 	 * @param instance The instance to solve.
 	 * @return A list of points. Each point in the instance appears exactly once.
 	 */
-	public static List<Point> solve(Instance instance) {
+	public List<Point> solve(Instance instance) {
 
 		Point[] points = instance.getPoints().toArray(new Point[instance.getPoints().size()]);
 		Arrays.sort(points, (p1, p2) -> Integer.compare(p1.getId(), p2.getId()));

@@ -7,9 +7,9 @@ import ch.zhaw.ciel.mse.alg.tsp.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BestInsertion {
+public class BestInsertion implements Solver {
 
-    public static List<Point> solve(Instance instance) {
+    public List<Point> solve(Instance instance) {
         List<Point> R                       = instance.clonePointList();
         List<Point> S                       = new ArrayList<>(R.size());
         Point       e1;

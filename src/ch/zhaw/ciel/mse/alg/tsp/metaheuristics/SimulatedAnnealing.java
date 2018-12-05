@@ -6,10 +6,10 @@ import ch.zhaw.ciel.mse.alg.tsp.utils.Utils;
 
 import java.util.List;
 
-public class SimulatedAnnealing {
+public class SimulatedAnnealing implements Solver {
 
     // Calculate the acceptance probability
-    public static double acceptanceProbability(double currentDistance, double newDistance, double temperature) {
+    public  double acceptanceProbability(double currentDistance, double newDistance, double temperature) {
         // If the new solution is better, accept it
         if (newDistance < currentDistance) {
             return 1.0;
@@ -18,7 +18,7 @@ public class SimulatedAnnealing {
         return Math.exp((currentDistance - newDistance) / temperature);
     }
 
-    public static List<Point> solve(Instance instance) {
+    public List<Point> solve(Instance instance) {
         // Set initial temp
         double temp = 100;
 

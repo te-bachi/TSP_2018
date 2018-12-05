@@ -6,8 +6,8 @@ import ch.zhaw.ciel.mse.alg.tsp.utils.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TwoOpt {
-    public static List<Point> solve(Instance instance) {
+public class TwoOpt implements Solver {
+    public List<Point> solve(Instance instance) {
         List<Point> points                  = instance.clonePointList();
         List<Point> remainingCities         = new ArrayList<>(points.size());
         List<Point> visitedCities           = new ArrayList<>(points.size());

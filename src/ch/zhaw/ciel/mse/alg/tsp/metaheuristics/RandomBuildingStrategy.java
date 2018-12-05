@@ -10,8 +10,8 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.List;
 
-public class RandomBuildingStrategy {
-    public static List<Point> solve(Instance instance){
+public class RandomBuildingStrategy implements Solver {
+    public List<Point> solve(Instance instance){
 
         List<Point> solution;
         List<Point> bestSolution;
@@ -20,7 +20,7 @@ public class RandomBuildingStrategy {
         bestSolution = null;
         for (int i = 0; i < numSolutions; i++) {
 
-            solution = RandomBuildingStrategy.solve(instance);
+            solution = new RandomBuildingStrategy().solve(instance);
             System.out.print("Solution " + i + " has length: " + Utils.euclideanDistance2D(solution));
             if (bestSolution == null || Utils.euclideanDistance2D(solution) < Utils.euclideanDistance2D(bestSolution)) {
                 System.out.println(" => replace");
