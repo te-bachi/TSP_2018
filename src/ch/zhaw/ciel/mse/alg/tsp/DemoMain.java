@@ -20,9 +20,9 @@ public class DemoMain {
 
         //runSingleTSPInstance("andreas");
 
-		runSingleTSPInstance("berlin52");
+		//runSingleTSPInstance("berlin52");
 		//runSingleTSPInstance("reseau_suisse");
-        //runSingleTSPInstance("rl5915");
+        runSingleTSPInstance("rl5915");
         //for (String instanceName : instanceNames) {
         //    runSingleTSPInstance(instanceName);
         //}
@@ -51,7 +51,8 @@ public class DemoMain {
 		//solution = GreedyInsertion.solve(instance);
 		//solution = NearestNeighbor.solve(instance);
         //solution = BestInsertion.solve(instance);
-        solution = SimulatedAnnealing.solve(instance);
+        //solution = new SimulatedAnnealing().solve(instance);
+		solution = new AntColonyOptimization().solve(instance);
         System.out.println(instanceName + " " + Utils.euclideanDistance2D(solution));
 
 

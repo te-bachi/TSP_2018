@@ -26,7 +26,7 @@ public class SimulatedAnnealing implements Solver {
         double coolingRate = 0.01;
 
         // Initialize intial solution
-        List<Point> currentSolution = NearestNeighbor.solve(instance);
+        List<Point> currentSolution = new NearestNeighbor().solve(instance);
         List<Point> newSolution;
 
         System.out.println("Initial solution distance: " + Utils.euclideanDistance2D(currentSolution));

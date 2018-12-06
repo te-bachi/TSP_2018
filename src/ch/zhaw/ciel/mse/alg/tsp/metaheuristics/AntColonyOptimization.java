@@ -2,6 +2,7 @@ package ch.zhaw.ciel.mse.alg.tsp.metaheuristics;
 
 import ch.zhaw.ciel.mse.alg.tsp.utils.Instance;
 import ch.zhaw.ciel.mse.alg.tsp.utils.Point;
+import ch.zhaw.ciel.mse.alg.tsp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +24,7 @@ public class AntColonyOptimization implements Solver {
 
     private int         numberOfCities;
     private int         numberOfAnts;
-    private double      graph[][];
+    private double      distance[][];
     private double      trails[][];
     private List<Ant>   ants            = new ArrayList<>();
     private Random      random          = new Random();
@@ -36,10 +37,21 @@ public class AntColonyOptimization implements Solver {
 
     @Override
     public List<Point> solve(Instance instance) {
-        List<Point> R = instance.clonePointList();
+        List<Point> points = instance.clonePointList();
+        int n = points.size();
 
+        distance = new double[n][n];
+        generateDistanceMatrix(points);
 
+        numberOfCities = distance.length;
+        numberOfAnts = (int) (numberOfCities * antFactor);
 
+        trails = new double[numberOfCities][numberOfCities];
+        probabilities = new double[numberOfCities];
+        IntStream.range(0, numberOfAnts)
+                .forEach(i -> ants.add(new Ant(numberOfCities)));
+
+        startAntOptimization();
         return null;
     }
 
@@ -82,15 +94,18 @@ public class AntColonyOptimization implements Solver {
 
     /*---------------------------------------------------------*/
 
-    public AntColonyOptimization(int noOfCities) {
-        graph = generateRandomMatrix(noOfCities);
-        numberOfCities = graph.length;
-        numberOfAnts = (int) (numberOfCities * antFactor);
+    public AntColonyOptimization() {
 
-        trails = new double[numberOfCities][numberOfCities];
-        probabilities = new double[numberOfCities];
-        IntStream.range(0, numberOfAnts)
-                .forEach(i -> ants.add(new Ant(numberOfCities)));
+    }
+
+    public void generateDistanceMatrix(List<Point> points) {
+        int i;
+        int k;
+        for (i = 0; i < points.size(); i++) {
+            for (k = 0; k < points.size(); k++) {
+                distance[i][k] = Utils.euclideanDistance2D(points.get(i), points.get(k));
+            }
+        }
     }
 
     /**
@@ -191,14 +206,14 @@ public class AntColonyOptimization implements Solver {
         double pheromone = 0.0;
         for (int l = 0; l < numberOfCities; l++) {
             if (!ant.visited(l)) {
-                pheromone += Math.pow(trails[i][l], alpha) * Math.pow(1.0 / graph[i][l], beta);
+                pheromone += Math.pow(trails[i][l], alpha) * Math.pow(1.0 / distance[i][l], beta);
             }
         }
         for (int j = 0; j < numberOfCities; j++) {
             if (ant.visited(j)) {
                 probabilities[j] = 0.0;
             } else {
-                double numerator = Math.pow(trails[i][j], alpha) * Math.pow(1.0 / graph[i][j], beta);
+                double numerator = Math.pow(trails[i][j], alpha) * Math.pow(1.0 / distance[i][j], beta);
                 probabilities[j] = numerator / pheromone;
             }
         }
@@ -214,7 +229,7 @@ public class AntColonyOptimization implements Solver {
             }
         }
         for (Ant a : ants) {
-            double contribution = Q / a.trailLength(graph);
+            double contribution = Q / a.trailLength(distance);
             for (int i = 0; i < numberOfCities - 1; i++) {
                 trails[a.trail[i]][a.trail[i + 1]] += contribution;
             }
@@ -229,11 +244,11 @@ public class AntColonyOptimization implements Solver {
         if (bestTourOrder == null) {
             bestTourOrder = ants.get(0).trail;
             bestTourLength = ants.get(0)
-                    .trailLength(graph);
+                    .trailLength(distance);
         }
         for (Ant a : ants) {
-            if (a.trailLength(graph) < bestTourLength) {
-                bestTourLength = a.trailLength(graph);
+            if (a.trailLength(distance) < bestTourLength) {
+                bestTourLength = a.trailLength(distance);
                 bestTourOrder = a.trail.clone();
             }
         }

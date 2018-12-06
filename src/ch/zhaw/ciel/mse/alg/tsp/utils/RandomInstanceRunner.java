@@ -41,7 +41,7 @@ public class RandomInstanceRunner {
 			//System.out.println("        Nearest Neighbor solution has length: " + Utils.euclideanDistance2D(solution));
 
 			//Get the solution obtained with the greedy insertion heuristic.
-			solution = GreedyInsertion.solve(randomInstance);
+			solution = new GreedyInsertion().solve(randomInstance);
 			Printer.writeToSVG(randomInstance, solution, Paths.get(pathToSolutions, i + "_greedy.html"));
 			System.out.println("        Greedy Insertion solution has length: " + Utils.euclideanDistance2D(solution));
 
