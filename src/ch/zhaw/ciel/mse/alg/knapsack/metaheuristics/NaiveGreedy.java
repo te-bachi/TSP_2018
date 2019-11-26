@@ -22,13 +22,14 @@ public class NaiveGreedy implements Solver {
 
             /* Check if item fits in knapsack */
             if (!knapsack.tryAddToContent(itemMaxValue)) {
-//                System.out.println("Can't add item!");
-//                System.out.println("itemWeight=" + itemMaxValue.getWeight() + " contentWeight= " + knapsack.getContentWeight());
-//                System.out.println("itemWeight + contentWeight =" + (itemMaxValue.getWeight() + knapsack.getContentWeight()) + " <=> maxWeight=" + knapsack.getMaxWeight());
-//
-//                System.out.println(itemMaxValue.toString());
+                /* If it doesn't fit into knapsack: throw it out of the repertory */
                 repertory.remove(itemMaxValue);
+
             }
+            knapsack.printOverviewContent();
+            knapsack.increaseIteration();
         }
+
+        return;
     }
 }

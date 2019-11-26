@@ -71,7 +71,6 @@ public class Printer {
 	 * @throws IOException
 	 */
 	public static void writeToSVG(Instance instance, List<Point> solution, Path filePath) throws IOException {
-
 		PrinterSettings settings = new PrinterSettings(solution);
 
 		Files.createDirectories(filePath.getParent());

@@ -18,8 +18,11 @@ public class SmarterGreedy implements Solver {
         while (repertory.size() > 0) {
             /* Check if item fits in knapsack */
             if (!knapsack.tryAddToContent(repertory.get(0))) {
+                /* If it doesn't fit into knapsack: throw it out of the repertory */
                 repertory.remove(0);
             }
+            knapsack.printOverviewContent();
+            knapsack.increaseIteration();
         }
     }
 }

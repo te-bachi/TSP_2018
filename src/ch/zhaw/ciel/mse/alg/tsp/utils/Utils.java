@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.BinaryOperator;
+import java.util.stream.IntStream;
 
 /**
  * 
@@ -18,6 +19,10 @@ import java.util.function.BinaryOperator;
  */
 public class Utils {
 
+	public static int calcNumLines(int n) {
+		return IntStream.rangeClosed(1, n)
+				.reduce(0, (int x, int y) -> x + y);
+	}
 
 	public static List<Point> clonePointList(List<Point> points) {
 		ArrayList<Point> clonedPoints = new ArrayList<Point>(points.size());

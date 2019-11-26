@@ -26,8 +26,13 @@ public class KnapsackReader {
             throw new IOException("number of lines doesn't match content");
         }
 
-        int[] weights = lines.subList(OFFSET_WEIGHTS, numItems + OFFSET_WEIGHTS).stream().mapToInt(Integer::valueOf).toArray();
-        int[] values  = lines.subList(numItems + OFFSET_VALUES, (2 * numItems) + OFFSET_VALUES).stream().mapToInt(Integer::valueOf).toArray();
+        int[] weights = lines.subList(OFFSET_WEIGHTS, numItems + OFFSET_WEIGHTS)
+                             .stream()
+                             .mapToInt(Integer::valueOf)
+                             .toArray();
+        int[] values  = lines.subList(numItems + OFFSET_VALUES, (2 * numItems) + OFFSET_VALUES)
+                             .stream().mapToInt(Integer::valueOf)
+                             .toArray();
 
         if (numItems != weights.length || numItems != values.length) {
             throw new IOException("numItem doesn't match weights or values");

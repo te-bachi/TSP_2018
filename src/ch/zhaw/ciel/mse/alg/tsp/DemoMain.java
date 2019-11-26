@@ -2,7 +2,6 @@ package ch.zhaw.ciel.mse.alg.tsp;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.zhaw.ciel.mse.alg.tsp.metaheuristics.*;
@@ -13,22 +12,56 @@ import ch.zhaw.ciel.mse.alg.tsp.utils.Utils;
 
 public class DemoMain {
 
-	public static void main(String[] args) throws IOException {
-
-	    //String[] instanceNames =  {"berlin52", "bier127", "pr1002", "pr2392", "reseau_suisse", "rl5915", "sw24978", "tsp225"};
-        //String[] instanceNames =  {"berlin52", "bier127", "pr1002", "pr2392", "tsp225"};
-
-        //runSingleTSPInstance("andreas");
-
-		//runSingleTSPInstance("berlin52");
-		//runSingleTSPInstance("reseau_suisse");
-        runSingleTSPInstance("rl5915");
-        //for (String instanceName : instanceNames) {
-        //    runSingleTSPInstance(instanceName);
-        //}
+	enum SolverOption {
+		RANDOM_SAMPLING,
+		GREEDY_INSERTION,
+		NEAREST_NEIGHBOR,
+        ALL_DISTANCES,
+		BEST_INSERTION,
+		PILOT_METHOD,
+		SIMULATED_ANNEALING,
+		ANT_COLONY_OPTIMIZATION
 	}
 
-	private static void runSingleTSPInstance(String instanceName) throws IOException {
+	public static void main(String[] args) throws IOException {
+
+		SolverOption option = SolverOption.PILOT_METHOD;
+
+		InstanceName[] instanceNames = new InstanceName[] {
+				new InstanceName(true, "andreas8"),
+				new InstanceName(false, "andreas12"),
+				new InstanceName(false, "berlin52"),
+				new InstanceName(false, "bier127"),
+				new InstanceName(false, "pr1002"),
+				new InstanceName(false, "pr2392"),
+				new InstanceName(false, "reseau_suisse"),
+				new InstanceName(false, "rl5915"),
+				new InstanceName(false, "sw24978"),
+				new InstanceName(false, "tsp225"),
+		};
+
+		Solver solver = null;
+		switch (option) {
+			case RANDOM_SAMPLING:			solver = new RandomSampling();			break;
+			case GREEDY_INSERTION:			solver = new GreedyInsertion();			break;
+            case NEAREST_NEIGHBOR:			solver = new NearestNeighbor();			break;
+            case ALL_DISTANCES:			    solver = new AllDistances();			break;
+			case BEST_INSERTION:			solver = new BestInsertion();			break;
+			case PILOT_METHOD:			    solver = new PilotMethod(2, new NearestNeighbor());			break;
+			case SIMULATED_ANNEALING:		solver = new SimulatedAnnealing();		break;
+			case ANT_COLONY_OPTIMIZATION:	solver = new AntColonyOptimization();	break;
+			default:
+				throw new IllegalStateException("Unexpected value: " + option);
+		}
+
+		for (InstanceName instanceName : instanceNames) {
+			if (instanceName.isEnabled()) {
+				runSingleTSPInstance(instanceName.getName(), solver);
+			}
+        }
+	}
+
+	private static void runSingleTSPInstance(String instanceName, Solver solver) throws IOException {
 
 		String solutionName = instanceName;
 
@@ -41,20 +74,16 @@ public class DemoMain {
 		String pathToInstance = pathToInstances + java.io.File.separator + instanceName + instanceFilenameExtension;
 		String pathToSolution = pathToSolutions + java.io.File.separator + solutionName + solutionFilenameExtension;
 
-		//System.out.println("Loading instance " + instanceName + "...");
+		System.out.println("Loading instance " + instanceName + "...");
 		Instance instance = Instance.load(Paths.get(pathToInstance));
 
-		//System.out.println("Instance has " + instance.getPoints().size() + " points.");
+		System.out.println("Instance has " + instance.getPoints().size() + " points.");
 
-		//System.out.println("Start generating a solution...");
+		System.out.println("Start generating a solution...");
 		List<Point> solution;
-		//solution = GreedyInsertion.solve(instance);
-		//solution = NearestNeighbor.solve(instance);
-        //solution = BestInsertion.solve(instance);
-        //solution = new SimulatedAnnealing().solve(instance);
-		solution = new AntColonyOptimization().solve(instance);
-        System.out.println(instanceName + " " + Utils.euclideanDistance2D(solution));
+		solution = solver.solve(instance);
 
+        System.out.println(instanceName + " " + Utils.euclideanDistance2D(solution));
 
 		// Generate Visualization of Result, will be stored in directory pathToSolutions
 		Printer.writeToSVG(instance, solution, Paths.get(pathToSolution));

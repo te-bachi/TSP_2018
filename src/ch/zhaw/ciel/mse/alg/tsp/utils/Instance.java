@@ -33,10 +33,16 @@ public class Instance {
 	 *             If an exception occurs while reading the file.
 	 */
 	public static Instance load(Path filePath) throws IOException {
+		/* String Path --> Buffered Reader */
 		try (BufferedReader tspFileReader = Files.newBufferedReader(filePath, Charset.forName("UTF-8"))) {
+			/* Read all lines into a List of Strings */
 			List<String> lines = Files.readAllLines(filePath);
+
+			/* Split into header */
 			List<String> header = lines.subList(0, 2);
 
+			/* Split into points */
+			/* for every line, split by <tab>, create new Point-object */
 			List<Point> points = lines.subList(2, lines.size()).stream().map(line -> line.split("\t"))
 					.map(splits -> new Point(Integer.parseInt(splits[0]), Double.parseDouble(splits[1]), Double.parseDouble(splits[2])))
 					.collect(Collectors.toList());
@@ -78,11 +84,6 @@ public class Instance {
 	}
 
 	public List<Point> clonePointList() {
-		ArrayList<Point> clonedPoints = new ArrayList<Point>(getPoints().size());
-
-		for (Point p : getPoints()) {
-			clonedPoints.add(p);
-		}
-		return clonedPoints;	
+		return new ArrayList<Point>(getPoints());
 	}
 }

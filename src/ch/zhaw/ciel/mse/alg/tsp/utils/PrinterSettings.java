@@ -3,7 +3,7 @@ package ch.zhaw.ciel.mse.alg.tsp.utils;
 import java.util.List;
 
 public class PrinterSettings {
-    public double margin = 0;
+    public double margin = 50;
 
     public double minX = Double.MAX_VALUE;
     public double minY = Double.MAX_VALUE;
@@ -16,7 +16,7 @@ public class PrinterSettings {
 
     public PrinterSettings(List<Point> solution) {
 
-        for(Point point : solution){
+        for (Point point : solution){
             maxX = Math.max(maxX, point.getX());
             maxY = Math.max(maxY, point.getY());
 
@@ -27,9 +27,10 @@ public class PrinterSettings {
         xTransform = margin - minX;
         yTransform = margin - minY;
 
-        width = (int)(maxX + xTransform + margin);
+        width  = (int)(maxX + margin + xTransform);
         height = (int)(maxY + margin + yTransform);
 
+        /*
         System.out.println("maxX=" + maxX);
         System.out.println("maxY=" + maxY);
         System.out.println("minX=" + minX);
@@ -38,5 +39,6 @@ public class PrinterSettings {
         System.out.println("yTransform=" + yTransform);
         System.out.println("width=" + width);
         System.out.println("height=" + height);
+        */
     }
 }

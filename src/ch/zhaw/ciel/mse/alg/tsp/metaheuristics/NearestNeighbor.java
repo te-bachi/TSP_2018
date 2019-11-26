@@ -36,6 +36,7 @@ public class NearestNeighbor implements Solver {
         int         k;
 
         i = 0;
+        /* iterate: always switch start-city
         //for (i = 0; i < points.size(); i++) {
             /* load remaining cities list */
             remainingCities.addAll(points);
@@ -76,6 +77,7 @@ public class NearestNeighbor implements Solver {
             visitedCities.clear();
         //}
 
+        bestTour.stream().map(city -> "" + city.getId() + ": " + city.getX() + "/" + city.getY()).forEach(System.out::println);
         return bestTour;
     }
 }
