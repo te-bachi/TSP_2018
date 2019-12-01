@@ -8,22 +8,27 @@ import java.util.List;
 
 public class SimulatedAnnealing implements Solver {
 
+    private double temp;
+    private double coolingRate;
+
+    public SimulatedAnnealing() {
+        this.temp           = 10000;
+        this.coolingRate    = 0.01;
+    }
+
     // Calculate the acceptance probability
     public  double acceptanceProbability(double currentDistance, double newDistance, double temperature) {
         // If the new solution is better, accept it
         if (newDistance < currentDistance) {
-            return 1.0;
+            return 1.1;
         }
         // If the new solution is worse, calculate an acceptance probability
-        return Math.exp((currentDistance - newDistance) / temperature);
+        double alpha = Math.exp((currentDistance - newDistance) / temperature);
+
+        return alpha;
     }
 
     public List<Point> solve(Instance instance) {
-        // Set initial temp
-        double temp = 100;
-
-        // Cooling rate
-        double coolingRate = 0.01;
 
         // Initialize intial solution
         List<Point> currentSolution = new NearestNeighbor().solve(instance);
@@ -35,7 +40,7 @@ public class SimulatedAnnealing implements Solver {
         List<Point> best = Utils.clonePointList(currentSolution);
 
         // Loop until system has cooled
-        while (temp > 0.1) {
+        while (this.temp > 0.01) {
 
             newSolution = Utils.clonePointList(currentSolution);
 
@@ -56,26 +61,28 @@ public class SimulatedAnnealing implements Solver {
             double newDistance     = Utils.euclideanDistance2D(newSolution);
 
             // Decide if we should accept the neighbour
-            if (acceptanceProbability(currentDistance, newDistance, temp) > Math.random()) {
-                System.out.println("accept new solution " + newDistance);
+            double alpha = acceptanceProbability(currentDistance, newDistance, temp);
+            double rand = Math.random();
+            System.out.println("alpha=" + String.format("%.3f", alpha) + " rand=" + String.format("%.3f", rand));
+            if (alpha > rand) {
+                //System.out.println("accept new solution " + newDistance);
                 currentSolution = Utils.clonePointList(newSolution);
             } else {
-                System.out.println("don't accept solution!");
+                //System.out.println("don't accept solution! pos1=" + pos1 + " pos2=" + pos2);
             }
 
             // Keep track of the best solution found
             if (Utils.euclideanDistance2D(currentSolution) < Utils.euclideanDistance2D(best)) {
-                System.out.println("replace best");
+                System.out.println("replace best " + Utils.euclideanDistance2D(currentSolution));
                 best = Utils.clonePointList(currentSolution);
             }
 
             // Cool system
             temp *= 1 - coolingRate;
-            //System.out.println("temp=" + temp);
         }
 
         System.out.println("Final solution distance: " + Utils.euclideanDistance2D(best));
-        System.out.println("Tour: " + best);
+        //System.out.println("Tour: " + best.toString());
 
         return best;
     }

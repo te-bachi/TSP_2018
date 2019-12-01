@@ -39,8 +39,16 @@ public class Printer {
 	}
 
 	private static void writeSVGCircles(List<Point> circles, PrinterSettings settings, BufferedWriter svgWriter) throws IOException {
-		for(Point point : circles){
-			svgWriter.write("    <circle cx=\"" + (int)Math.rint(point.getX() + settings.xTransform) + "\" cy=\"" + (int)Math.rint(point.getY() + settings.yTransform) + "\" r=\"10\" stroke=\"black\" stroke-width=\"1\" fill=\"black\"/>\n");
+		Point point;
+		int i;
+		for (i = 0; i < circles.size(); i++) {
+			point = circles.get(i);
+			svgWriter.write("    <circle cx=\"" + (int)Math.rint(point.getX() + settings.xTransform) + "\" cy=\"" + (int)Math.rint(point.getY() + settings.yTransform) + "\" r=\"10\" stroke=\"black\" stroke-width=\"1\" fill=\"");
+			switch (i) {
+				case 0:		svgWriter.write("green\"/>\n");
+				case 1:		svgWriter.write("blue\"/>\n");
+				default:	svgWriter.write("black\"/>\n");
+			}
 		}
 	}
 

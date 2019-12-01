@@ -10,8 +10,10 @@ public class NaiveGreedy implements Solver {
     public void solve(Knapsack knapsack) {
         List<Item> repertory        = knapsack.getRepertory();
         Item itemMaxValue;
-
+        boolean removed;
         while (repertory.size() > 0) {
+            removed = false;
+
             /* Find max. value in repertory */
             itemMaxValue = null;
             for (Item item : repertory) {
@@ -24,9 +26,20 @@ public class NaiveGreedy implements Solver {
             if (!knapsack.tryAddToContent(itemMaxValue)) {
                 /* If it doesn't fit into knapsack: throw it out of the repertory */
                 repertory.remove(itemMaxValue);
-
+                removed = true;
             }
+
             knapsack.printOverviewContent();
+
+            if (removed) {
+                System.out.println(
+                        itemMaxValue + " " +
+                                knapsack.getContentWeight() + " + " +
+                                itemMaxValue.getWeight() + " = " +
+                                (knapsack.getContentWeight() + itemMaxValue.getWeight() )
+                );
+            }
+
             knapsack.increaseIteration();
         }
 

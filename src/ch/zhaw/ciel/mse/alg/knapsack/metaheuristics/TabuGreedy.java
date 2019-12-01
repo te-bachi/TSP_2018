@@ -19,7 +19,7 @@ public class TabuGreedy implements Solver {
             if (item.getTabuDuration() == 0) {
                 /* item fits into the knapsack */
                 if ((item.getWeight() + knapsack.getContentWeight()) <= knapsack.getMaxWeight()) {
-                    /* item has more value that most valuable item so far */
+                    /* no most valuable item _OR_ item has more value that most valuable item so far */
                     if (mostValuableItem == null || item.getValue() > mostValuableItem.getValue()) {
                         mostValuableItem = item;
                     }
@@ -60,6 +60,9 @@ public class TabuGreedy implements Solver {
                 return true;
             }
         }
+
+        /* there is no best item list _OR_ sizes are not equal _OR_ best doesn't contain all from content */
+        /* best list != content list */
         return false;
     }
 
@@ -67,12 +70,15 @@ public class TabuGreedy implements Solver {
     public void solve(Knapsack knapsack) {
         List<Item> bestItems = null;
         int bestContentWeight = 0;
+        boolean removed;
 
         Item mostValuableItem;
         Item leastValuableItem = null;
 
         while (knapsack.getContentWeight() != knapsack.getMaxWeight()) {
-            /* Find most valuable */
+            removed = false;
+
+            /* Find most valuable that fits in bag */
             mostValuableItem = findMostValuableInRepertoryThatFitsInContent(knapsack);
 
 
@@ -92,7 +98,7 @@ public class TabuGreedy implements Solver {
                 /** set tabu duration **/
                 mostValuableItem.setTabuDuration(TABU_DURATION);
 
-            /* If not found... */
+            /* If not found... (because no space in bag, etc.) */
             } else {
                 /* Remove least valuable */
                 leastValuableItem = findLeastValuableInContent(knapsack);
@@ -100,6 +106,7 @@ public class TabuGreedy implements Solver {
                     System.out.println("can't remove least valuable!");
                     return;
                 }
+                removed = true;
 
                 /** set tabu duration **/
                 leastValuableItem.setTabuDuration(TABU_DURATION);
@@ -113,6 +120,10 @@ public class TabuGreedy implements Solver {
             }
 
             knapsack.printOverviewContent();
+            if (removed) {
+                System.out.println(leastValuableItem);
+            }
+
             knapsack.increaseIteration();
             System.out.print("");
         }

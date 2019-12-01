@@ -25,12 +25,12 @@ public class DemoMain {
 
 	public static void main(String[] args) throws IOException {
 
-		SolverOption option = SolverOption.PILOT_METHOD;
+		SolverOption option = SolverOption.SIMULATED_ANNEALING;
 
 		InstanceName[] instanceNames = new InstanceName[] {
-				new InstanceName(true, "andreas8"),
+				new InstanceName(false, "andreas8"),
 				new InstanceName(false, "andreas12"),
-				new InstanceName(false, "berlin52"),
+				new InstanceName(true, "berlin52"),
 				new InstanceName(false, "bier127"),
 				new InstanceName(false, "pr1002"),
 				new InstanceName(false, "pr2392"),
